@@ -6,7 +6,7 @@
 /*   By: kdvarako <kdvarako@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:43:51 by kdvarako          #+#    #+#             */
-/*   Updated: 2024/05/17 12:05:27 by kdvarako         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:55:22 by kdvarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,21 @@ void	chartobinary(unsigned char ch, pid_t pid)
 	sendbinary(bin, pid);
 }
 
+int	error_pid(char *arg)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < ft_strlen(arg))
+	{
+		if (arg[i] >= '0' && arg[i] <= '9')
+			i++;
+		else
+			return (-1);
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	pid_t			pid;
@@ -67,6 +82,11 @@ int	main(int argc, char **argv)
 	if (argc < 3)
 	{
 		ft_putstr_fd("Not all parameters were given!\n", 1);
+		return (-1);
+	}
+	if (error_pid(argv[1]) == -1)
+	{
+		ft_putstr_fd("Entered pid is not a number\n", 1);
 		return (-1);
 	}
 	i = 0;
