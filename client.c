@@ -6,7 +6,7 @@
 /*   By: kdvarako <kdvarako@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:43:51 by kdvarako          #+#    #+#             */
-/*   Updated: 2024/05/17 16:55:22 by kdvarako         ###   ########.fr       */
+/*   Updated: 2024/05/18 12:44:45 by kdvarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,10 @@ void	chartobinary(unsigned char ch, pid_t pid)
 	while (val > 0)
 	{
 		if (val % 2 == 1)
-		{
 			bin[j] = '1';
-			j--;
-		}
 		else
-		{
 			bin[j] = '0';
-			j--;
-		}
+		j--;
 		val = val / 2;
 	}
 	while (j >= 0)
