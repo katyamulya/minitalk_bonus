@@ -6,7 +6,7 @@
 /*   By: kdvarako <kdvarako@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:43:54 by kdvarako          #+#    #+#             */
-/*   Updated: 2024/05/16 17:20:09 by kdvarako         ###   ########.fr       */
+/*   Updated: 2024/05/18 12:47:00 by kdvarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,9 @@ int	binarytodec(int bin, int i)
 	binn[5] = 4;
 	binn[6] = 2;
 	binn[7] = 1;
-
 	n = binn[i] * bin;
 	return (n);
 }
-
 
 int	getdecimal(int signum, int i, int num)
 {
@@ -80,7 +78,6 @@ int	main(void)
 	ft_putstr_fd("PID = ", 1);
 	ft_putnbr_fd(pid, 1);
 	write(1, "\n", 1);
-
 	while (1)
 	{
 		signal(SIGUSR1, signalhandler);
