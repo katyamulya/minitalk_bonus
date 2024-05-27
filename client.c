@@ -6,7 +6,7 @@
 /*   By: kdvarako <kdvarako@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:43:51 by kdvarako          #+#    #+#             */
-/*   Updated: 2024/05/20 11:33:36 by kdvarako         ###   ########.fr       */
+/*   Updated: 2024/05/27 11:53:38 by kdvarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	sendbinary(char *s, pid_t pid)
 		else if (s[i] == '0')
 			kill(pid, SIGUSR1);
 		i++;
-		usleep(200);
+		usleep(300);
 	}
 }
 
