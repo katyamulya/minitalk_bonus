@@ -6,7 +6,7 @@
 /*   By: kdvarako <kdvarako@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:43:54 by kdvarako          #+#    #+#             */
-/*   Updated: 2024/05/20 11:28:38 by kdvarako         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:04:18 by kdvarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,30 +58,43 @@ char	*charjoin(char *s, char ch)
 	return (free(s), s = NULL, ptr);
 }
 
-void	signalhandler(int signum)
+void	signalprint(int *j, int number)
 {
-	static int	i;
-	static int	j;
-	static int	number;
 	static char	*s;
 
 	if (!s)
 		s = ft_calloc(1, 1);
+	s = charjoin(s, ((char) number));
+	if (((char) number) == '\0')
+	{
+		ft_putstr_fd(s, 1);
+		write(1, "\n", 1);
+		free(s);
+		s = NULL;
+		*j = -1;
+	}
+}
+
+void	signalhandler(int signum, siginfo_t *info, void *context)
+{
+	static int	i;
+	static int	j;
+	static int	number;
+	static int	t_pid = 0;
+
+	(void)context;
+	if ((info != 0) && (t_pid != info->si_pid))
+	{
+		t_pid = info->si_pid;
+		i = 0;
+	}
 	if (i == 0)
 		number = 0;
 	number = getdecimal(signum, i, number);
 	i++;
 	if (i == 8)
 	{
-		s = charjoin (s, ((char) number));
-		if (((char) number) == '\0')
-		{
-			ft_putstr_fd(s, 1);
-			write(1, "\n", 1);
-			free(s);
-			s = NULL;
-			j = -1;
-		}
+		signalprint(&j, number);
 		j++;
 		i = 0;
 	}
@@ -89,17 +102,20 @@ void	signalhandler(int signum)
 
 int	main(void)
 {
-	pid_t	pid;
+	pid_t				pid;
+	struct sigaction	sa;
 
 	pid = getpid();
 	ft_putstr_fd("PID = ", 1);
 	ft_putnbr_fd(pid, 1);
 	write(1, "\n", 1);
+	sa.sa_handler = (void *)signalhandler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_SIGINFO;
+	if (sigaction(SIGUSR1, &sa, NULL) == -1)
+		ft_putstr_fd("Error SIGUSR1!\n", 1);
+	if (sigaction(SIGUSR2, &sa, NULL) == -1)
+		ft_putstr_fd("Error SIGUSR2!\n", 1);
 	while (1)
-	{
-		signal(SIGUSR1, signalhandler);
-		signal(SIGUSR2, signalhandler);
 		pause();
-	}
-	return (0);
 }
