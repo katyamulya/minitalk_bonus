@@ -6,7 +6,7 @@
 /*   By: kdvarako <kdvarako@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 15:40:23 by kdvarako          #+#    #+#             */
-/*   Updated: 2024/05/27 12:04:45 by kdvarako         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:04:09 by kdvarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,6 @@ int	getdecimal(int signum, int i, int num)
 		bin = 1;
 	num = num + bin * binn[i];
 	return (num);
-}
-
-void	printnsignal(char *s, pid_t pid)
-{
-	ft_putstr_fd(s, 1);
-	write(1, "\n", 1);
-	kill(pid, SIGUSR1);
 }
 
 char	*charjoin(char *s, char ch)
@@ -65,30 +58,44 @@ char	*charjoin(char *s, char ch)
 	return (free(s), s = NULL, ptr);
 }
 
+void	signalprint(int *j, int number, pid_t pid)
+{
+	static char	*s;
+
+	if (!s)
+		s = ft_calloc(1, 1);
+	s = charjoin(s, ((char) number));
+	if (((char) number) == '\0')
+	{
+		ft_putstr_fd(s, 1);
+		write(1, "\n", 1);
+		kill(pid, SIGUSR1);
+		free(s);
+		s = NULL;
+		*j = -1;
+	}
+}
+
 void	signalhandler(int signum, siginfo_t *info, void *context)
 {
 	static int	i;
 	static int	j;
 	static int	number;
-	static char	*s;
+	static int	t_pid = 0;
 
 	(void)context;
-	if (!s)
-		s = ft_calloc(1, 1);
+	if ((info != 0) && (t_pid != info->si_pid))
+	{
+		t_pid = info->si_pid;
+		i = 0;
+	}
 	if (i == 0)
 		number = 0;
 	number = getdecimal(signum, i, number);
 	i++;
 	if (i == 8)
 	{
-		s = charjoin (s, ((char) number));
-		if (((char) number) == '\0')
-		{
-			printnsignal(s, info->si_pid);
-			free(s);
-			s = NULL;
-			j = -1;
-		}
+		signalprint(&j, number, info->si_pid);
 		j++;
 		i = 0;
 	}
@@ -107,16 +114,10 @@ int	main(void)
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_SIGINFO;
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
-	{
-		printf("Error SIGUSR1!\n");
-	}
+		ft_putstr_fd("Error SIGUSR1!\n", 1);
 	if (sigaction(SIGUSR2, &sa, NULL) == -1)
-	{
-		printf("Error SIGUSR2!\n");
-	}
+		ft_putstr_fd("Error SIGUSR2!\n", 1);
 	while (1)
-	{
 		pause();
-	}
 	return (0);
 }
