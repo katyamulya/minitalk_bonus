@@ -6,7 +6,7 @@
 /*   By: kdvarako <kdvarako@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 15:39:23 by kdvarako          #+#    #+#             */
-/*   Updated: 2024/05/27 11:53:18 by kdvarako         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:10:53 by kdvarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,23 @@ void	sendbinary(char *s, pid_t pid)
 	while (i < 9)
 	{
 		if (s[i] == '1')
-			kill(pid, SIGUSR2);
+		{
+			if (kill(pid, SIGUSR2) == -1)
+			{
+				ft_putstr_fd("Problem sending the signal!\n", 1);
+				exit(1);
+			}
+		}
 		else if (s[i] == '0')
-			kill(pid, SIGUSR1);
+		{
+			if (kill(pid, SIGUSR1) == -1)
+			{
+				ft_putstr_fd("Problem sending the signal!\n", 1);
+				exit(1);
+			}
+		}
 		i++;
-		usleep(300);
+		usleep(500);
 	}
 }
 
