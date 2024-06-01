@@ -6,7 +6,7 @@
 /*   By: kdvarako <kdvarako@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 15:39:23 by kdvarako          #+#    #+#             */
-/*   Updated: 2024/05/30 14:10:53 by kdvarako         ###   ########.fr       */
+/*   Updated: 2024/06/01 10:44:11 by kdvarako         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	sendbinary(char *s, pid_t pid)
 			}
 		}
 		i++;
-		usleep(500);
+		usleep(400);
 	}
 }
 
